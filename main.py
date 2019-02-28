@@ -1,16 +1,15 @@
 import boto3
-from botocore.exceptions import ClientError
+# from botocore.exceptions import ClientError
+from dotenv import load_dotenv
+import os
 
-key_id='xxxxxx'
-key_secret='xxxxxx'
-region='xxxxxx'
+# Load .env
+load_dotenv()
 
-ec2 = boto3.client('ec2',aws_access_key_id=key_id, aws_secret_access_key=key_secret, region_name=region)
+# Make the connection
+ec2 = boto3.client('ec2',
+                   aws_access_key_id=os.getenv('AWS_ID'),
+                   aws_secret_access_key=os.getenv('AWS_SECRET'),
+                   region_name=os.getenv('AWS_REGION'))
 
-instance_list = ec2.describe_instances(InstanceIds=['i-01d39373421e303a8'])
 
-if instance_list:
-	try:
-		ec2.stop_instances(InstanceIds=['i-01d39373421e303a8'])
-	except ClientError as e:
-		print("ERROR: ",e)
